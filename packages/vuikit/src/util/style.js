@@ -85,8 +85,8 @@ export function getCssVar (name) {
       vars[name] = JSON.parse(vars[name])
 
     } catch (e) {}
-
-    document.documentElement.removeChild(element)
+      if (typeof document !=='undefined')
+        document.documentElement.removeChild(element)
 
   }
 
@@ -106,7 +106,7 @@ export function propName (name) {
 }
 
 const cssPrefixes = ['webkit', 'moz', 'ms']
-const {style} = document.createElement('_')
+const {style} = (typeof document !=='undefined')?document.createElement('_'):[]
 
 function vendorPropName (name) {
 

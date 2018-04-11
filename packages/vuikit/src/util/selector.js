@@ -5,7 +5,9 @@
 /* eslint-disable one-var, no-mixed-operators, no-useless-call */
 import {removeAttr} from './attr'
 import {isNode, isString, startsWith, toNode, toNodes} from './lang'
-
+if(typeof document ==='undefined'){
+  const  document=null;
+}
 export function query (selector, context) {
   return toNode(selector) || find(selector, isContextSelector(selector) ? context : document)
 }
@@ -90,10 +92,8 @@ const contextSanitizeRe = /([!>+~])(?=\s+[!>+~]|\s*$)/g
 function isContextSelector (selector) {
   return isString(selector) && selector.match(contextSelectorRe)
 }
-
-const elProto = Element.prototype
-const matchesFn = elProto.matches || elProto.webkitMatchesSelector || elProto.msMatchesSelector
-
+const elProto =(typeof Element !== 'undefined') ?Element.prototype:{closest:null,matches:null,webkitMatchesSelector:null,elProto:null}
+const   matchesFn = elProto.matches || elProto.webkitMatchesSelector || elProto.msMatchesSelector
 export function matches (element, selector) {
   return toNodes(element).some(element => matchesFn.call(element, selector))
 }
@@ -139,7 +139,7 @@ export function parents (element, selector) {
   return elements
 }
 
-const escapeFn = window.CSS && CSS.escape || function (css) { return css.replace(/([^\x7f-\uFFFF\w-])/g, match => `\\${match}`) }
+const escapeFn = (typeof window !=='undefined')? window.CSS && CSS.escape || function (css) { return css.replace(/([^\x7f-\uFFFF\w-])/g, match => `\\${match}`) }:null
 export function escape (css) {
   return isString(css) ? escapeFn.call(null, css) : ''
 }
